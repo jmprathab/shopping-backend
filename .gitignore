@@ -5,6 +5,15 @@
 ### Custom stuff###
 src/main/resources/*.json
 
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
 HELP.md
 .gradle
 build/
