@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.prathab.shoppingbackend;
+package com.prathab.shopping;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootTest
-class ShoppingBackendApplicationTests {
+@SpringBootApplication
+public class ShoppingBackendApplication {
 
-  @Test
-  void contextLoads() {
+  public static void main(String[] args) {
+    SpringApplication.run(ShoppingBackendApplication.class, args);
   }
 }
