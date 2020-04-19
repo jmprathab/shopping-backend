@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.api.v1.model;
+package com.prathab.shopping.services;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Set;
 
-@Data
-@NoArgsConstructor
-public class UserDTO {
-  @NotBlank
-  private String name;
-  @NotBlank
-  private String mobile;
-  @Email
-  @NotBlank
-  private String email;
-  @NotBlank
-  private String password;
+public interface CrudService<T, ID> {
+
+  Set<T> findAll();
+
+  T findById(ID id);
+
+  T save(T object);
+
+  void delete(T object);
+
+  void deleteById(ID id);
 }

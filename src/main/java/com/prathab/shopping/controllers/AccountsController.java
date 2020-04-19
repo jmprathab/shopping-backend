@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.controllers.v1;
+package com.prathab.shopping.controllers;
 
-import com.prathab.shopping.api.v1.model.UserDTO;
+import com.prathab.shopping.api.mapper.UserMapper;
+import com.prathab.shopping.api.model.UserDTO;
+import com.prathab.shopping.domain.User;
+import com.prathab.shopping.services.UserService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,14 +29,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
+
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping(ENDPOINT)
 public class AccountsController {
+  public static final String ENDPOINT = "/api/v1/accounts";
+  private final UserService userService;
+  private final UserMapper userMapper;
 
-  @PostMapping("/")
+  public AccountsController(UserService userService,
+      UserMapper userMapper, UserMapper userMapper1) {
+    this.userService = userService;
+    this.userMapper = userMapper1;
+  }
+
+  @PostMapping("/user")
   @ResponseStatus(HttpStatus.CREATED)
-  UserDTO createAccount(@Valid @RequestBody UserDTO userDTO) {
-    return userDTO;
+  User createAccount(@Valid @RequestBody UserDTO userDTO) {
+    User user = userMapper.userDtoToUser(userDTO);
+    userService.save(user);
+    return user;
   }
 }

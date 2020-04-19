@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.controllers.v1;
+package com.prathab.shopping.api.model;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Controller
-@Slf4j
-public class WelcomeController {
-  @RequestMapping({"", "/", "index", "index.html"})
-  String welcome() {
-    return "welcome";
-  }
+@Data
+@NoArgsConstructor
+public class UserDTO {
+  @NotBlank
+  private String name;
+  @NotBlank
+  private String mobile;
+  @Email
+  @NotBlank
+  private String email;
+  @NotBlank
+  @Size(min = 6, max = 80, message = "Password must be between 6 to 80 characters")
+  private String password;
 }

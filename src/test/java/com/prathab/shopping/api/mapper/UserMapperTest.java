@@ -14,24 +14,30 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.api.v1.mapper;
+package com.prathab.shopping.api.mapper;
 
+import com.prathab.shopping.api.model.UserDTO;
 import com.prathab.shopping.domain.User;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 class UserMapperTest {
+
+  private final Long id = 1L;
+  private final String name = "User";
+  private final String email = "abc.xyz.com";
+  private final String mobile = "1234567890";
+  private final String password = "password";
+
+  @Autowired
+  private UserMapper userMapper;
 
   @Test
   void userToUserDto() {
-
-    var id = 1L;
-    var name = "User";
-    var email = "abc.xyz.com";
-    var mobile = "1234567890";
-    var password = "password";
-
     //given
     var user = new User();
     user.setId(id);
@@ -41,7 +47,7 @@ class UserMapperTest {
     user.setPassword(password);
 
     //when
-    var userDto = UserMapper.INSTANCE.userToUserDto(user);
+    var userDto = userMapper.userToUserDto(user);
 
     //then
     assertEquals(userDto.getEmail(), email);
@@ -49,5 +55,17 @@ class UserMapperTest {
 
   @Test
   void userDtoToUser() {
+    //given
+    var userDto = new UserDTO();
+    userDto.setName(name);
+    userDto.setEmail(email);
+    userDto.setMobile(mobile);
+    userDto.setPassword(password);
+
+    //when
+    var user = userMapper.userDtoToUser(userDto);
+
+    //then
+    assertEquals(user.getEmail(), email);
   }
 }

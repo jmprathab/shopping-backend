@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.api.v1.mapper;
+package com.prathab.shopping.services;
 
-import com.prathab.shopping.api.v1.model.UserDTO;
 import com.prathab.shopping.domain.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface UserMapper {
-  UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+public interface UserService extends CrudService<User, Long> {
 
-  UserDTO userToUserDto(User user);
-
-  User userDtoToUser(UserDTO userDto);
 }
