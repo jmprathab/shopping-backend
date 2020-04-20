@@ -17,16 +17,17 @@
 package com.prathab.shopping.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prathab.shopping.api.mapper.UserMapper;
 import com.prathab.shopping.api.model.UserDTO;
 import com.prathab.shopping.domain.User;
 import com.prathab.shopping.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,13 +39,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AccountsController.class)
-class AccountsControllerTest {
+public class AccountsControllerTest {
 
-  @Mock
+  @MockBean
   UserService userService;
+  @MockBean
+  UserMapper userMapper;
 
   @Autowired
-  ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
 
   @Autowired
   private MockMvc mockMvc;
@@ -56,35 +59,39 @@ class AccountsControllerTest {
 
   @Test
   public void createAccountTest() throws Exception {
+    //when
     var email = "abc@xyz.com";
     var mobile = "8110031139";
     var name = "User";
     var password = "password";
 
-    UserDTO userDTO = new UserDTO();
+    var userDTO = new UserDTO();
     userDTO.setEmail(email);
     userDTO.setMobile(mobile);
     userDTO.setName(name);
     userDTO.setPassword(password);
 
-    User user = new User();
-    user.setId(1L);
+    var user = new User();
+    user.setId(Long.MAX_VALUE);
     user.setEmail(email);
     user.setMobile(mobile);
     user.setName(name);
     user.setPassword("");
 
-    when(userService.save(ArgumentMatchers.any())).thenReturn(user);
+    when(userService.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+    when(userMapper.userDtoToUser(ArgumentMatchers.any(UserDTO.class))).thenReturn(user);
+    when(userMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
 
+    //then
     mockMvc.perform(
-        post(ENDPOINT)
+        post(ENDPOINT + "/user")
             .content(objectMapper.writeValueAsString(userDTO))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id", equalTo(1L)))
+        .andExpect(jsonPath("$.id", equalTo(Long.MAX_VALUE)))
         .andExpect(jsonPath("$.name", equalTo(name)))
         .andExpect(jsonPath("$.email", equalTo(email)))
         .andExpect(jsonPath("$.mobile", equalTo(mobile)))
-        .andExpect(jsonPath("$.password", equalTo(""))); // TODO Remove password from result
+        .andExpect(jsonPath("$.password", equalTo("")));
   }
 }

@@ -65,6 +65,13 @@ dependencies {
   compile "org.springdoc:springdoc-openapi-ui:${openApiVersion}"
 }
 
+compileJava {
+  // Mapstruct options
+  options.annotationProcessorPath = configurations.annotationProcessor
+  options.compilerArgs << "-Amapstruct.defaultComponentModel=spring"
+  options.compilerArgs << "-Amapstruct.unmappedTargetPolicy=IGNORE"
+}
+
 test {
   useJUnitPlatform()
 }

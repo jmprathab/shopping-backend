@@ -20,7 +20,7 @@ import com.prathab.shopping.api.model.UserDTO;
 import com.prathab.shopping.domain.User;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface UserMapper {
 
   UserDTO userToUserDto(User user);

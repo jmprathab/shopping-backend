@@ -40,9 +40,9 @@ public class AccountsController {
   private final UserMapper userMapper;
 
   public AccountsController(UserService userService,
-      UserMapper userMapper, UserMapper userMapper1) {
+      UserMapper userMapper) {
     this.userService = userService;
-    this.userMapper = userMapper1;
+    this.userMapper = userMapper;
   }
 
   @PostMapping("/user")
