@@ -62,7 +62,7 @@ dependencies {
   }
 
   // API documentation
-  compile "org.springdoc:springdoc-openapi-ui:${openApiVersion}"
+  implementation "org.springdoc:springdoc-openapi-ui:${openApiVersion}"
 }
 
 compileJava {
