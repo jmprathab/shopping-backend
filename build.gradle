@@ -44,22 +44,27 @@ ext {
 }
 
 dependencies {
+  // Spring
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   //implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
   implementation 'org.springframework.boot:spring-boot-starter-mail'
   implementation 'org.springframework.boot:spring-boot-starter-validation'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-  compileOnly 'org.projectlombok:lombok'
-  compileOnly "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
-  annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-  testImplementation "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
   runtimeOnly 'com.h2database:h2'
-  annotationProcessor 'org.projectlombok:lombok'
   testImplementation('org.springframework.boot:spring-boot-starter-test') {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
+
+  // Lombok
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+
+  // Mapstruct
+  compileOnly "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
+  annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+  testImplementation "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
 
   // API documentation
   implementation "org.springdoc:springdoc-openapi-ui:${openApiVersion}"
