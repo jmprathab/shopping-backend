@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.api.model;
+package com.prathab.shopping.api.mapper;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.prathab.shopping.api.model.UserSignUpDTO;
+import com.prathab.shopping.domain.User;
+import org.mapstruct.Mapper;
 
-@Data
-@NoArgsConstructor
-public class UserDTO {
-  @NotBlank
-  private String name;
-  @NotBlank
-  private String mobile;
-  @Email
-  @NotBlank
-  private String email;
-  @NotBlank
-  @Size(min = 6, max = 80, message = "Password must be between 6 to 80 characters")
-  private String password;
+@Mapper
+public interface UserSignUpMapper {
+
+  UserSignUpDTO userToUserDto(User user);
+
+  User userDtoToUser(UserSignUpDTO userDto);
 }

@@ -17,7 +17,9 @@
 package com.prathab.shopping.services;
 
 import com.prathab.shopping.domain.User;
+import java.util.Optional;
 
 public interface UserService extends CrudService<User, Long> {
 
+  Optional<User> findByEmail(String email);
 }

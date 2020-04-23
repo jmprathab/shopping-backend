@@ -20,6 +20,7 @@ import com.prathab.shopping.domain.User;
 import com.prathab.shopping.repositories.UserRepository;
 import com.prathab.shopping.services.UserService;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,9 @@ public class UserSDJpaService implements UserService {
 
   @Override public void deleteById(Long aLong) {
     userRepository.deleteById(aLong);
+  }
+
+  @Override public Optional<User> findByEmail(String email) {
+    return Optional.of(userRepository.findByEmail(email));
   }
 }

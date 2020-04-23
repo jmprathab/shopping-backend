@@ -17,8 +17,8 @@
 package com.prathab.shopping.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prathab.shopping.api.mapper.UserMapper;
-import com.prathab.shopping.api.model.UserDTO;
+import com.prathab.shopping.api.mapper.UserSignUpMapper;
+import com.prathab.shopping.api.model.UserSignUpDTO;
 import com.prathab.shopping.domain.User;
 import com.prathab.shopping.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +31,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.prathab.shopping.controllers.AccountsController.CREATE_ACCOUNT;
 import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
@@ -44,7 +45,7 @@ public class AccountsControllerTest {
   @MockBean
   UserService userService;
   @MockBean
-  UserMapper userMapper;
+  UserSignUpMapper userMapper;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -61,37 +62,33 @@ public class AccountsControllerTest {
   public void createAccountTest() throws Exception {
     //when
     var email = "abc@xyz.com";
-    var mobile = "8110031139";
     var name = "User";
     var password = "password";
 
-    var userDTO = new UserDTO();
+    var userDTO = new UserSignUpDTO();
     userDTO.setEmail(email);
-    userDTO.setMobile(mobile);
     userDTO.setName(name);
     userDTO.setPassword(password);
 
     var user = new User();
     user.setId(Long.MAX_VALUE);
     user.setEmail(email);
-    user.setMobile(mobile);
     user.setName(name);
     user.setPassword("");
 
     when(userService.save(ArgumentMatchers.any(User.class))).thenReturn(user);
-    when(userMapper.userDtoToUser(ArgumentMatchers.any(UserDTO.class))).thenReturn(user);
+    when(userMapper.userDtoToUser(ArgumentMatchers.any(UserSignUpDTO.class))).thenReturn(user);
     when(userMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
 
     //then
     mockMvc.perform(
-        post(ENDPOINT + "/user")
+        post(ENDPOINT + CREATE_ACCOUNT)
             .content(objectMapper.writeValueAsString(userDTO))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id", equalTo(Long.MAX_VALUE)))
         .andExpect(jsonPath("$.name", equalTo(name)))
         .andExpect(jsonPath("$.email", equalTo(email)))
-        .andExpect(jsonPath("$.mobile", equalTo(mobile)))
         .andExpect(jsonPath("$.password", equalTo("")));
   }
 }

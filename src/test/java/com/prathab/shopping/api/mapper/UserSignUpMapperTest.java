@@ -16,7 +16,7 @@
 
 package com.prathab.shopping.api.mapper;
 
-import com.prathab.shopping.api.model.UserDTO;
+import com.prathab.shopping.api.model.UserSignUpDTO;
 import com.prathab.shopping.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +25,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class UserMapperTest {
+class UserSignUpMapperTest {
 
   private final Long id = 1L;
   private final String name = "User";
   private final String email = "abc.xyz.com";
-  private final String mobile = "1234567890";
   private final String password = "password";
 
   @Autowired
-  private UserMapper userMapper;
+  private UserSignUpMapper userMapper;
 
   @Test
   void userToUserDto() {
@@ -43,7 +42,6 @@ class UserMapperTest {
     user.setId(id);
     user.setName(name);
     user.setEmail(email);
-    user.setMobile(mobile);
     user.setPassword(password);
 
     //when
@@ -56,10 +54,9 @@ class UserMapperTest {
   @Test
   void userDtoToUser() {
     //given
-    var userDto = new UserDTO();
+    var userDto = new UserSignUpDTO();
     userDto.setName(name);
     userDto.setEmail(email);
-    userDto.setMobile(mobile);
     userDto.setPassword(password);
 
     //when

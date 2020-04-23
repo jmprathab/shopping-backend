@@ -18,10 +18,15 @@ package com.prathab.shopping.services.map;
 
 import com.prathab.shopping.domain.User;
 import com.prathab.shopping.services.UserService;
+import java.util.Optional;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
 @Profile({"default", "map"})
 public class UserMapService extends AbstractMapService<User, Long> implements UserService {
+  @Override public Optional<User> findByEmail(String email) {
+    var list = super.findAll();
+    return list.stream().filter(e -> e.getEmail().contentEquals(email)).findFirst();
+  }
 }

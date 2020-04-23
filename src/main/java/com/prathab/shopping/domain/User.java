@@ -16,6 +16,7 @@
 
 package com.prathab.shopping.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Entity
 public class User extends BaseEntity {
   private String name;
-  private String mobile;
+  @Column(unique = true)
   private String email;
   private String password;
 }
