@@ -16,7 +16,9 @@
 
 package com.prathab.shopping.controllers;
 
+import com.prathab.shopping.api.mapper.UserLoginMapper;
 import com.prathab.shopping.api.mapper.UserSignUpMapper;
+import com.prathab.shopping.api.model.UserLoginDTO;
 import com.prathab.shopping.api.model.UserSignUpDTO;
 import com.prathab.shopping.domain.User;
 import com.prathab.shopping.services.UserService;
@@ -37,21 +39,32 @@ import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
 public class AccountsController {
   public static final String ENDPOINT = "/api/v1/accounts";
   public static final String CREATE_ACCOUNT = "/create";
+  public static final String LOGIN = "/login";
 
   private final UserService userService;
-  private final UserSignUpMapper userMapper;
+  private final UserSignUpMapper userSignUpMapper;
+  private final UserLoginMapper userLoginMapper;
 
   public AccountsController(UserService userService,
-      UserSignUpMapper userMapper) {
+      UserSignUpMapper userSignUpMapper,
+      UserLoginMapper userLoginMapper) {
     this.userService = userService;
-    this.userMapper = userMapper;
+    this.userSignUpMapper = userSignUpMapper;
+    this.userLoginMapper = userLoginMapper;
   }
 
   @PostMapping(value = CREATE_ACCOUNT)
   @ResponseStatus(HttpStatus.CREATED)
   User createAccount(@Valid @RequestBody UserSignUpDTO userDTO) {
-    var user = userMapper.userDtoToUser(userDTO);
+    var user = userSignUpMapper.userDtoToUser(userDTO);
     userService.save(user);
     return user;
+  }
+
+  @PostMapping(value = LOGIN)
+  @ResponseStatus(HttpStatus.OK)
+  User login(@Valid @RequestBody UserLoginDTO userDTO) {
+    var user = userLoginMapper.userDtoToUser(userDTO);
+    return userService.findByEmail(user.getEmail()).get();
   }
 }

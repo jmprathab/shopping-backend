@@ -17,10 +17,13 @@
 package com.prathab.shopping.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prathab.shopping.api.mapper.UserLoginMapper;
 import com.prathab.shopping.api.mapper.UserSignUpMapper;
+import com.prathab.shopping.api.model.UserLoginDTO;
 import com.prathab.shopping.api.model.UserSignUpDTO;
 import com.prathab.shopping.domain.User;
 import com.prathab.shopping.services.UserService;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -33,6 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.prathab.shopping.controllers.AccountsController.CREATE_ACCOUNT;
 import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
+import static com.prathab.shopping.controllers.AccountsController.LOGIN;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,7 +49,10 @@ public class AccountsControllerTest {
   @MockBean
   UserService userService;
   @MockBean
-  UserSignUpMapper userMapper;
+  UserSignUpMapper userSignUpMapper;
+
+  @MockBean
+  UserLoginMapper userLoginMapper;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -77,8 +84,9 @@ public class AccountsControllerTest {
     user.setPassword("");
 
     when(userService.save(ArgumentMatchers.any(User.class))).thenReturn(user);
-    when(userMapper.userDtoToUser(ArgumentMatchers.any(UserSignUpDTO.class))).thenReturn(user);
-    when(userMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
+    when(userSignUpMapper.userDtoToUser(ArgumentMatchers.any(UserSignUpDTO.class))).thenReturn(
+        user);
+    when(userSignUpMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
 
     //then
     mockMvc.perform(
@@ -86,6 +94,39 @@ public class AccountsControllerTest {
             .content(objectMapper.writeValueAsString(userDTO))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id", equalTo(Long.MAX_VALUE)))
+        .andExpect(jsonPath("$.name", equalTo(name)))
+        .andExpect(jsonPath("$.email", equalTo(email)))
+        .andExpect(jsonPath("$.password", equalTo("")));
+  }
+
+  @Test
+  public void loginTest() throws Exception {
+    //when
+    var email = "abc@xyz.com";
+    var name = "User";
+    var password = "password";
+
+    var userDTO = new UserLoginDTO();
+    userDTO.setEmail(email);
+    userDTO.setPassword(password);
+
+    var user = new User();
+    user.setId(Long.MAX_VALUE);
+    user.setEmail(email);
+    user.setName(name);
+    user.setPassword("");
+
+    when(userService.findByEmail(ArgumentMatchers.any(String.class))).thenReturn(Optional.of(user));
+    when(userLoginMapper.userDtoToUser(ArgumentMatchers.any(UserLoginDTO.class))).thenReturn(user);
+    when(userLoginMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
+
+    //then
+    mockMvc.perform(
+        post(ENDPOINT + LOGIN)
+            .content(objectMapper.writeValueAsString(userDTO))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$.id", equalTo(Long.MAX_VALUE)))
         .andExpect(jsonPath("$.name", equalTo(name)))
         .andExpect(jsonPath("$.email", equalTo(email)))
