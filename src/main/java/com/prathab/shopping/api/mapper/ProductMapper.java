@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.repositories;
+package com.prathab.shopping.api.mapper;
 
-import com.prathab.shopping.domain.Image;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.prathab.shopping.api.model.ProductDTO;
+import com.prathab.shopping.domain.Product;
+import org.mapstruct.Mapper;
 
-public interface ImageRepository extends JpaRepository<Image, Long> {
+@Mapper
+public interface ProductMapper {
+  ProductDTO productToProductDto(Product product);
+
+  Product productDtoToProduct(ProductDTO productDTO);
 }

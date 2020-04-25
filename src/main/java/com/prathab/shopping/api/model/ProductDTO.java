@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.domain;
+package com.prathab.shopping.api.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Entity
-public class Image extends BaseEntity {
-  @Lob
-  private byte[] picture;
-
-  @ManyToOne
-  private Product product;
+public class ProductDTO {
+  private String name;
+  private String description;
+  private String price;
 }

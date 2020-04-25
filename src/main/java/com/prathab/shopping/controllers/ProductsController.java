@@ -16,16 +16,22 @@
 
 package com.prathab.shopping.controllers;
 
+import com.prathab.shopping.api.mapper.ProductMapper;
+import com.prathab.shopping.api.model.ProductDTO;
 import com.prathab.shopping.domain.Product;
 import com.prathab.shopping.repositories.ProductRepository;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
+import static com.prathab.shopping.controllers.ProductsController.ENDPOINT;
 
 @Slf4j
 @RestController
@@ -35,13 +41,31 @@ public class ProductsController {
   public static final String PRODUCT = "/product";
 
   private final ProductRepository productRepository;
+  private final ProductMapper productMapper;
 
-  public ProductsController(ProductRepository productRepository) {
+  public ProductsController(ProductRepository productRepository,
+      ProductMapper productMapper) {
     this.productRepository = productRepository;
+    this.productMapper = productMapper;
   }
 
   @GetMapping(PRODUCT)
   public Set<Product> getProduct() {
-    return new HashSet<>(productRepository.findAll());
+    var result = new HashSet<Product>();
+    productRepository.findAll().forEach(result::add);
+    return result;
+  }
+
+  @GetMapping(PRODUCT + "/{id}")
+  public Product getProductById(@PathVariable("id") Long id) {
+    return productRepository.findById(id).get();
+  }
+
+  @PostMapping(PRODUCT + "/{id}")
+  public Product updateProductById(@PathVariable("id") Long id,
+      @Valid @RequestBody ProductDTO productDTO) {
+    Product newProduct = productMapper.productDtoToProduct(productDTO);
+    newProduct.setId(id);
+    return productRepository.save(newProduct);
   }
 }

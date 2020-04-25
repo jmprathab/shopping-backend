@@ -16,15 +16,10 @@
 
 package com.prathab.shopping.bootstrap;
 
-import com.prathab.shopping.domain.Image;
 import com.prathab.shopping.domain.Product;
 import com.prathab.shopping.domain.User;
-import com.prathab.shopping.repositories.ImageRepository;
 import com.prathab.shopping.repositories.ProductRepository;
 import com.prathab.shopping.repositories.UserRepository;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashSet;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -32,14 +27,11 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements CommandLineRunner {
   private final UserRepository userRepository;
   private final ProductRepository productRepository;
-  private final ImageRepository imageRepository;
 
   public DataLoader(UserRepository userRepository,
-      ProductRepository productRepository,
-      ImageRepository imageRepository) {
+      ProductRepository productRepository) {
     this.userRepository = userRepository;
     this.productRepository = productRepository;
-    this.imageRepository = imageRepository;
   }
 
   @Override public void run(String... args) throws Exception {
@@ -51,11 +43,8 @@ public class DataLoader implements CommandLineRunner {
 
     var productName = "Dog Food";
     var productDescription = "Best dog food";
-    var product = new Product(productName, productDescription, new HashSet<>());
-    var savedProduct = productRepository.save(product);
-    var bytes = Files.readAllBytes(
-        Paths.get(getClass().getResource("/bootstrap/bootstrap_dog_image.jpg").getPath()));
-    var image = new Image(bytes, savedProduct);
-    imageRepository.save(image);
+    var price = "100";
+    var product = new Product(productName, productDescription, price);
+    productRepository.save(product);
   }
 }

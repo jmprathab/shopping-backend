@@ -34,7 +34,9 @@ public class ProductSDJpaService implements ProductService {
   }
 
   @Override public Set<Product> findAll() {
-    return new HashSet<>(productRepository.findAll());
+    var result = new HashSet<Product>();
+    productRepository.findAll().forEach(result::add);
+    return result;
   }
 
   @Override public Product findById(Long aLong) {

@@ -16,11 +16,7 @@
 
 package com.prathab.shopping.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +30,5 @@ import lombok.Setter;
 public class Product extends BaseEntity {
   private String name;
   private String description;
-
-  @OneToMany(cascade = CascadeType.ALL)
-  private Set<Image> images = new HashSet<>();
+  private String price;
 }
