@@ -31,13 +31,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
+import static com.prathab.shopping.controllers.AccountsController.ACCOUNTS_ENDPOINT;
 
 @Slf4j
 @RestController
-@RequestMapping(ENDPOINT)
+@RequestMapping(ACCOUNTS_ENDPOINT)
 public class AccountsController {
-  public static final String ENDPOINT = "/api/v1/accounts";
+  public static final String ACCOUNTS_ENDPOINT = "/api/v1/accounts";
   public static final String CREATE_ACCOUNT = "/create";
   public static final String LOGIN = "/login";
 

@@ -17,28 +17,38 @@
 package com.prathab.shopping.bootstrap;
 
 import com.prathab.shopping.domain.Product;
+import com.prathab.shopping.domain.Role;
 import com.prathab.shopping.domain.User;
 import com.prathab.shopping.repositories.ProductRepository;
 import com.prathab.shopping.repositories.UserRepository;
+import java.util.HashSet;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DataLoader implements CommandLineRunner {
   private final UserRepository userRepository;
   private final ProductRepository productRepository;
+  private final PasswordEncoder passwordEncoder;
 
   public DataLoader(UserRepository userRepository,
-      ProductRepository productRepository) {
+      ProductRepository productRepository,
+      PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.productRepository = productRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override public void run(String... args) throws Exception {
-    var name = "Prathab";
-    var email = "jm.prathab@gmail.com";
+    var name = "Test";
+    var email = "test@shopping.com";
     var password = "password";
-    var user = new User(name, email, password);
+    var encodedPassword = passwordEncoder.encode(password);
+    var roles = new HashSet<Role>();
+    roles.add(new Role("ROLE_ADMIN"));
+    roles.add(new Role("ROLE_USER"));
+    var user = new User(name, email, encodedPassword, roles);
     userRepository.save(user);
 
     var productName = "Dog Food";

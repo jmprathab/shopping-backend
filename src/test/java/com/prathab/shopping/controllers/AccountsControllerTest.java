@@ -34,8 +34,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.prathab.shopping.controllers.AccountsController.ACCOUNTS_ENDPOINT;
 import static com.prathab.shopping.controllers.AccountsController.CREATE_ACCOUNT;
-import static com.prathab.shopping.controllers.AccountsController.ENDPOINT;
 import static com.prathab.shopping.controllers.AccountsController.LOGIN;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
@@ -66,8 +66,8 @@ public class AccountsControllerTest {
   }
 
   @Test
-  public void createAccountTest() throws Exception {
-    //when
+  void createAccountTest() throws Exception {
+    //given
     var email = "abc@xyz.com";
     var name = "User";
     var password = "password";
@@ -88,9 +88,9 @@ public class AccountsControllerTest {
         user);
     when(userSignUpMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
 
-    //then
+    //when and then
     mockMvc.perform(
-        post(ENDPOINT + CREATE_ACCOUNT)
+        post(ACCOUNTS_ENDPOINT + CREATE_ACCOUNT)
             .content(objectMapper.writeValueAsString(userDTO))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
@@ -101,8 +101,8 @@ public class AccountsControllerTest {
   }
 
   @Test
-  public void loginTest() throws Exception {
-    //when
+  void loginTest() throws Exception {
+    //given
     var email = "abc@xyz.com";
     var name = "User";
     var password = "password";
@@ -121,9 +121,9 @@ public class AccountsControllerTest {
     when(userLoginMapper.userDtoToUser(ArgumentMatchers.any(UserLoginDTO.class))).thenReturn(user);
     when(userLoginMapper.userToUserDto(ArgumentMatchers.any(User.class))).thenReturn(userDTO);
 
-    //then
+    //when and then
     mockMvc.perform(
-        post(ENDPOINT + LOGIN)
+        post(ACCOUNTS_ENDPOINT + LOGIN)
             .content(objectMapper.writeValueAsString(userDTO))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())

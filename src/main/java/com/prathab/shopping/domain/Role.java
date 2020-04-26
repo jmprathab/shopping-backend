@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.prathab.shopping.controllers;
+package com.prathab.shopping.domain;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import javax.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Controller
-@Slf4j
-public class WelcomeController {
-
-  @GetMapping({"", "/", "index", "index.html"})
-    // @PreAuthorize("hasAnyAuthority('WRITE', 'READ', 'DELETE')")
-    // @PreAuthorize("hasRole('ROLE_USER_L1')")
-  String welcome() {
-    return "welcome";
-  }
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Role extends BaseEntity {
+  private String name;
 }
